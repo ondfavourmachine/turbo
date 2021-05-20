@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "599176344789",
+    "project_id": "turbo-car-ride-app",
+    "storage_bucket": "turbo-car-ride-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:599176344789:android:38d8923d24cbdb1a9d9e5c",
+        "android_client_info": {
+          "package_name": "com.micheal.turbocarrideapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "599176344789-rk7rmq1vc1bc6b4ijj1ea4t6au0hlkpn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCfAPUGdM-fnODmk_LURzyh9MuQQBZLjuM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "599176344789-rk7rmq1vc1bc6b4ijj1ea4t6au0hlkpn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
