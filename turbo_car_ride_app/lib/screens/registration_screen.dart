@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 // import 'package:fluttertoast/fluttertoast.dart';
 import 'package:turbo_car_ride_app/constants/routes.dart';
 import 'package:turbo_car_ride_app/main.dart';
+import 'package:turbo_car_ride_app/reusables/dialog_spinner.dart';
 import 'package:turbo_car_ride_app/reusables/toaster.dart';
 
 class RegistrationScreen extends StatefulWidget {
@@ -245,11 +246,41 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
   }
 
   submitUserToFirebase(BuildContext context) async {
-    UserCredential firebaseUser = await _fireBaseAuth
-        .createUserWithEmailAndPassword(
-            email: emailController.text, password: password.text)
-        .catchError(
-            (err) => {print('${err}'), ToasterMessages.show(context, '$err')});
+    UserCredential firebaseUser;
+    showDialog(
+        context: context,
+        barrierDismissible: false,
+        builder: (builder) {
+          return CustomSpinner(msg: 'Creating your account...').build(context);
+        });
+
+    try {
+      firebaseUser = await _fireBaseAuth.createUserWithEmailAndPassword(
+          email: emailController.text.trim(), password: password.text.trim());
+    } on FirebaseAuthException catch (e) {
+      switch (e.code) {
+        case 'email-already-in-use':
+          Navigator.of(context).pop();
+          return ToasterMessages.show(context,
+              'This email is already in use. Please try again with a unique email.');
+        default:
+          Navigator.of(context).pop();
+          ToasterMessages.show(context,
+              'An error occured. Please try with a unique email and phone');
+      }
+    }
+
+    //     .onError((error, stackTrace) {
+    //   print('i am here');
+    //   print('''
+    //             ${error},
+    //             ${stackTrace}
+    //           ''');
+    // }).catchError((err) {
+    //   print('${err}');
+    //   Navigator.of(context).pop();
+    //   ToasterMessages.show(context, '$err');
+    // });
     if (firebaseUser != null) {
       Map user = {
         'name': name.text.trim(),
@@ -258,10 +289,12 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
       };
       // firebaseUser.user.uid;
       userRef.child(firebaseUser.user.uid).set(user);
+      Navigator.of(context).pop();
       ToasterMessages.show(context, 'Account Created Successfully');
       Navigator.of(context).pushNamedAndRemoveUntil(
           RoutesConstants.loginScreen, (route) => false);
     } else {
+      Navigator.of(context).pop();
       ToasterMessages.show(context, 'An error occured!');
     }
   }

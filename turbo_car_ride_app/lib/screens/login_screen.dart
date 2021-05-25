@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:turbo_car_ride_app/constants/routes.dart';
 import 'package:turbo_car_ride_app/main.dart';
+import 'package:turbo_car_ride_app/reusables/dialog_spinner.dart';
 import 'package:turbo_car_ride_app/reusables/toaster.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -188,22 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
         context: context,
         barrierDismissible: false,
         builder: (builder) {
-          return Dialog(
-            child: Container(
-              padding: EdgeInsets.all(10),
-              decoration: BoxDecoration(color: Colors.transparent),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  CircularProgressIndicator(),
-                  const SizedBox(
-                    height: 5,
-                  ),
-                  Text('Please wait...')
-                ],
-              ),
-            ),
-          );
+          return CustomSpinner(msg: 'Please wait...').build(context);
         });
 
     try {
