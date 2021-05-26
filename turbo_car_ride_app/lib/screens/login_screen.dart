@@ -189,7 +189,7 @@ class _LoginScreenState extends State<LoginScreen> {
         context: context,
         barrierDismissible: false,
         builder: (builder) {
-          return CustomSpinner(msg: 'Please wait...').build(context);
+          return CustomSpinner(msg: 'Authenticating...').build(context);
         });
 
     try {
@@ -197,11 +197,11 @@ class _LoginScreenState extends State<LoginScreen> {
           await _fireBaseAuth.signInWithEmailAndPassword(
               email: emailController.text.trim(),
               password: password.text.trim());
-      print('${firebaseLoggedInUser.user.uid}');
+      // print('${firebaseLoggedInUser.user.uid}');
 
       if (firebaseLoggedInUser != null) {
         print('${firebaseLoggedInUser.user}');
-        Navigator.of(context).pop();
+        //
         userRef
             .child(firebaseLoggedInUser.user.uid)
             .once()
@@ -214,17 +214,17 @@ class _LoginScreenState extends State<LoginScreen> {
           print('''${snapshot}
                   ''');
           if (snapshot.value != null) {
-            _fireBaseAuth.signOut();
+            Navigator.of(context).pop();
             Navigator.of(context).pushNamedAndRemoveUntil(
                 RoutesConstants.mainScreen, (route) => false);
           } else {
-            print('${snapshot.toString()}');
+            // print('${snapshot.toString()}');
+            _fireBaseAuth.signOut();
             ToasterMessages.show(context, 'Wrong email or password!');
           }
         });
       }
     } on FirebaseAuthException catch (e) {
-      print(e.code);
       if (e.code == 'invalid-email') {
         ToasterMessages.show(context,
             'The email you entered doesn\'t exist or is mispelled. Please try again with a valid email.');
@@ -237,6 +237,11 @@ class _LoginScreenState extends State<LoginScreen> {
         print('${e.code}');
         ToasterMessages.show(context,
             'Wrong password. Please enter the correct password for this email');
+        Navigator.of(context).pop();
+      } else {
+        print(e.code);
+        ToasterMessages.show(context,
+            'Please check that you have an active internet connection');
         Navigator.of(context).pop();
       }
     }
